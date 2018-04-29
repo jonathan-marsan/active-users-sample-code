@@ -12,9 +12,9 @@ WHERE
 LIMIT
   10
 ```
-** Answer **: Yes
+**Answer** Yes
 
-#### Q2: Can a single user be associated to several accounts?
+#### Q2 Can a single user be associated to several accounts?
 
 ```
 SELECT
@@ -29,4 +29,4 @@ ORDER BY
 LIMIT
   10
 ```
-** Answer **: Yes
+**Answer** Yes
