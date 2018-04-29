@@ -1,2 +1,6 @@
 #folders
 data/
+venv/
+
+#files
+.env
