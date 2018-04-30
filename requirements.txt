@@ -1,8 +1,13 @@
+docutils==0.14
+lockfile==0.12.2
+luigi==2.7.5
 numpy==1.14.3
 pandas==0.22.0
 psycopg2==2.7.4
+python-daemon==2.1.2
 python-dateutil==2.7.2
 pytz==2018.4
 six==1.11.0
 SQLAlchemy==1.2.7
 sqlalchemy-redshift==0.7.1
+tornado==4.5.3

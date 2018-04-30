@@ -63,5 +63,7 @@ query_insert_tbl = """
 """.format(SCHEMA, TABLE_NAME)
 
 
-execute_queries(conn=db_connection(),
-                queries=[query_drop_tbl, query_create_tbl, query_insert_tbl])
+def load_evolving_user_status_changed(conn):
+    execute_queries(conn=conn, queries=[query_drop_tbl, query_create_tbl,
+                                        query_insert_tbl])
+    print('Upload complete: {}'.format(TABLE_NAME))
