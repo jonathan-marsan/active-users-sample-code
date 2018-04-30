@@ -4,12 +4,17 @@ Create user_tasks_with_active_period view
 
 import os
 
-from utilities.db_connection import db_connection, execute_query
+from utilities.db_connection import execute_queries
 
 
 ACTIVE_PERIOD = 28
 SCHEMA = os.environ['SCHEMA_JM']
-TABLE_NAME = 'user_tasks_with_active_period'
+VIEW_NAME = 'user_tasks_with_active_period'
+
+
+query_drop_view = """
+    DROP VIEW IF EXISTS {0};
+""".format(VIEW_NAME)
 
 
 query_create_view = """
@@ -26,8 +31,10 @@ query_create_view = """
         WHERE
             sum_tasks_used > 0
             AND
-            user_id < 10;
-""".format(SCHEMA, TABLE_NAME, ACTIVE_PERIOD)
+            user_id < 1000;
+""".format(SCHEMA, VIEW_NAME, ACTIVE_PERIOD)
 
 
-execute_query(conn=db_connection(), query=query_create_view)
+def load_user_tasks_with_active_period(conn):
+    execute_queries(conn=conn, queries=[query_drop_view, query_create_view])
+    print('Created view: {}'.format(VIEW_NAME))

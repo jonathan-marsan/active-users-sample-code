@@ -11,6 +11,11 @@ SCHEMA = os.environ['SCHEMA_JM']
 TABLE_NAME = 'derived_user_became_inactive'
 
 
+query_drop_tbl = """
+    DROP TABLE IF EXISTS {0}.{1};
+""".format(SCHEMA, TABLE_NAME)
+
+
 query_create_tbl = """
     CREATE TABLE IF NOT EXISTS {0}.{1}(
         event_id integer IDENTITY(0,1),
@@ -47,6 +52,7 @@ query_insert_tbl = """
 """.format(SCHEMA, TABLE_NAME)
 
 
-execute_queries(conn=db_connection(),
-                queries=[query_create_tbl,
-                         query_insert_tbl])
+def load_derived_user_became_inactive(conn):
+    execute_queries(conn=conn, queries=[query_drop_tbl, query_create_tbl,
+                                        query_insert_tbl])
+    print('Upload complete: {}'.format(TABLE_NAME))

@@ -1,6 +1,6 @@
 #folders
 data/
 venv/
-
 #files
 .env
+*.pyc

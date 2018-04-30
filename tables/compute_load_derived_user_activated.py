@@ -1,5 +1,5 @@
 """
-Create derived_user_churned table
+Create derived_user_activated table
 """
 
 import os
@@ -8,7 +8,12 @@ from utilities.db_connection import db_connection, execute_queries
 
 
 SCHEMA = os.environ['SCHEMA_JM']
-TABLE_NAME = 'derived_user_churned'
+TABLE_NAME = 'derived_user_activated'
+
+
+query_drop_tbl = """
+    DROP TABLE IF EXISTS {0}.{1};
+""".format(SCHEMA, TABLE_NAME)
 
 
 query_create_tbl = """
@@ -26,19 +31,18 @@ query_insert_tbl = """
     INSERT INTO {0}.{1}(user_id, event_date, status)
         SELECT
           user_id,
-          task_date_period_end as event_date,
-          'CHURNED' as status
+          task_date as event_date,
+          'ACTIVE' as status
         FROM
           jmarsan.user_tasks_with_active_period
         WHERE
-          (task_date_period_end < next_task_date
+          (prev_task_date IS NULL
           OR
-          next_task_date IS NULL)
-          AND
-          DATEDIFF(day, task_date_period_end, CURRENT_DATE) > 28;
+          DATEDIFF(day, prev_task_date, task_date) > 28);
 """.format(SCHEMA, TABLE_NAME)
 
 
-execute_queries(conn=db_connection(),
-                queries=[query_create_tbl,
-                         query_insert_tbl])
+def load_derived_user_activated(conn):
+    execute_queries(conn=conn, queries=[query_drop_tbl, query_create_tbl,
+                                        query_insert_tbl])
+    print('Upload complete: {}'.format(TABLE_NAME))

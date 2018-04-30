@@ -1,6 +1,5 @@
 """
-Create lookup_dates table
-Reference: http://elliot.land/post/building-a-date-dimension-table-in-redshift
+Create lookup_months table
 """
 
 import os
@@ -10,7 +9,7 @@ from utilities.db_connection import db_connection, execute_queries
 
 # CONSTANTS
 SCHEMA = os.environ['SCHEMA_JM']
-TABLE_NAME = 'lookup_dates'
+TABLE_NAME = 'lookup_months'
 
 
 query_drop_tbl = """
@@ -29,17 +28,16 @@ query_create_tbl = """
 query_insert_tbl = """
     INSERT INTO {0}.{1}(snapshot_datestart, snapshot_dateend)
         SELECT
-          '2017-01-01' :: DATE + number AS snapshot_datestart,
-          '2017-01-02' :: DATE + number AS snapshot_dateend
+          snapshot_datestart,
+          CAST(DATEADD(month, 1, snapshot_datestart) as date)
         FROM
-          jmarsan.number
+          jmarsan.lookup_dates
         WHERE
-          number < 365
-        ORDER BY
-          number;
+          RIGHT(snapshot_datestart, 2) = '01';
 """.format(SCHEMA, TABLE_NAME)
 
 
-execute_queries(conn=db_connection(), queries=[query_drop_tbl,
-                                               query_create_tbl,
-                                               query_insert_tbl])
+def load_lookup_months(conn):
+    execute_queries(conn=conn, queries=[query_drop_tbl, query_create_tbl,
+                                        query_insert_tbl])
+    print('Upload complete: {}'.format(TABLE_NAME))

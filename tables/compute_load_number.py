@@ -11,6 +11,9 @@ from utilities.db_connection import db_connection, execute_queries
 SCHEMA = os.environ['SCHEMA_JM']
 TABLE_NAME = 'number'
 
+query_drop_tbl = """
+    DROP TABLE IF EXISTS {0}.{1};
+""".format(SCHEMA, TABLE_NAME)
 query_A = """
     CREATE TABLE IF NOT EXISTS {0}.{1} (
       {1} INTEGER NOT NULL
@@ -26,6 +29,8 @@ query_H = "INSERT INTO {0}.{1} SELECT {1} + 256 FROM {1};".format(SCHEMA, TABLE_
 query_I = "INSERT INTO {0}.{1} VALUES (0);".format(SCHEMA, TABLE_NAME)
 
 
-execute_queries(conn=db_connection(),
-                queries=[query_A, query_B, query_C, query_D, query_E, query_F,
-                         query_G, query_H, query_I])
+def load_number(conn):
+    execute_queries(conn=conn, queries=[query_drop_tbl, query_A, query_B,
+                                        query_C, query_D, query_E, query_F,
+                                        query_G, query_H, query_I])
+    print('Upload complete: {}'.format(TABLE_NAME))
