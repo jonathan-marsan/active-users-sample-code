@@ -29,9 +29,7 @@ query_create_view = """
         FROM
             source_data.tasks_used_da
         WHERE
-            sum_tasks_used > 0
-            AND
-            user_id < 1000;
+            sum_tasks_used > 0;
 """.format(SCHEMA, VIEW_NAME, ACTIVE_PERIOD)
 
 
