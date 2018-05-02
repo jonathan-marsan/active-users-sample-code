@@ -2,13 +2,19 @@
 
 ### Tooling
 
-#### Amazon Redshift + Python + Luigi
-The queries are executed directly in Redshift because of the size of the dataset, and the potential for the dataset to grow even more in the future.
+
+#### Dataset Exploration and Tests: Data Grip
+Data Grip was used to familiarize myself with the source data, test my queries, and also test output of functions that were new to me.
+
+#### ETL: Amazon Redshift + Python + Luigi
+The ETL queries to build tables were executed directly in Redshift because of the size of the dataset, and the potential for the dataset to grow even more in the future.
 
 Python was only used as a wrapper to execute the queries, and to run Luigi which handles task dependencies in simple pipelines very well.
 
-#### Jupyter Notebook
-R and Rmarkdown are my typical "go to" tools when visualizing data stories outside of a tool like Looker, Domo or Mode. Since this project is relatively small in scope, it did not warrant handled package dependencies in both R and Python. Jupyter notebooks are a great alternative, which is what I used.  :)
+#### Visualizations: Jupyter Notebook
+I am more familiar with visualizations in R. Since this project is relatively small in scope, I felt package management would be a little cumbersome with two different programming languages and opted for Jupyter + Python's Seaborn package. It was a great opportunity to re-familiarize myself with Jupyter Notebooks and visualization in Python. :)
+
+On the flip side, to actually automate these data stories or deliver them to stakeholders, more time to learn the Python Seaborn package, or a more robust tool like Looker, Domo, Mode or Plotly would be needed so x-axes are readable, numbers are visual on hover, etc. For an example of a data story and visualizations I made using R and Rmarkdown, please see: https://github.com/jonathan-marsan/nyc_restaurants
 
 
 ### Exploratory Notes

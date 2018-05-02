@@ -37,4 +37,4 @@ Calculation:
 * Dataset that shows the monthly churn rate
 
 Calculation:
-((total active users from previous month start) - (total active users from previous month that churned at current month start))/(total active users from previous month start)
+((total active users from previous month start) - (total active users from previous month that churned or are inactive at current month start))/(total active users from previous month start)
