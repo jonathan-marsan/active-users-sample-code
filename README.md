@@ -20,9 +20,10 @@ dataset using Amazon Redshift to model the data, Python and Luigi to run the scr
 * lookup_dates
 * lookup_months
 * number
-* snapshot_active_users_at_month_end
-* snapshot_churned_or_inactive_users_at_month_end
-* snapshot_churn_rate_by_month
+* snapshot_active_users_daily
+* snapshot_active_users_monthly
+* snapshot_churn_rate_daily
+* snapshot_churn_rate_monthly
 
 Note: See `doc/table-descriptions.md` file for brief descriptions of the tables.
 
@@ -35,6 +36,7 @@ Note: See `doc/table-descriptions.md` file for brief descriptions of the tables.
 * Within your project, create a Python 3 virtual environment, e.g.  `virtualenv -p python3 venv`
 * Activate the script using `source venv/bin/activate`
 * Run `pip3 install -r requirements.txt` to install required packages
+* When running the pipeline locally, to view the workflow visit: `http://localhost:8082/`
 
 Note: Only tested on Mac OS
 
@@ -63,4 +65,4 @@ export MY_SCHEMA="database_schema"
 * Create a kernel to run the Jupyter notebook within the virtual environment, e.g. `python3 -m ipython kernel install --user --name=active-users`
 * Within your virtual environment, start Jupyter notebook using `jupyter notebook`
 * Run `active-users.ipynb` with the kernel created above
-* For troubeshooting, see: https://stackoverflow.com/questions/42449814/running-jupyter-notebook-in-a-virtualenv-installed-sklearn-module-not-available?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
+* For troubeshooting, see: https://stackoverflow.com/questions/42449814/running-jupyter-notebook-in-a-virtualenv-installed-sklearn-module-not-available

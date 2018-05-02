@@ -11,6 +11,8 @@ The ETL queries to build tables were executed directly in Redshift because of th
 
 Python was only used as a wrapper to execute the queries, and to run Luigi which handles task dependencies in simple pipelines very well.
 
+An example of an improvement would be to use a manifest table to reference date periods and set up the scripts to not have to drop and reload the entire tables each time the pipeline is run, but only append latest data.
+
 #### Visualizations: Jupyter Notebook
 I am more familiar with visualizations in R. Since this project is relatively small in scope, I felt package management would be a little cumbersome with two different programming languages and opted for Jupyter + Python's Seaborn package. It was a great opportunity to re-familiarize myself with Jupyter Notebooks and visualization in Python. :)
 
