@@ -21,13 +21,20 @@
 #### lookup_months
 * Reference table to lookup up month.
 
-#### snapshot_active_users_at_month_end
-* Dataset that shows the total (aggregate) number of active users at the end of the month
+#### snapshot_active_users_daily
+* Dataset that shows the total (aggregate) number of active users at the beginning of each day
 
-#### snapshot_churned_or_inactive_users_at_month_end
-* Dataset that shows the total (aggregate) number of churned or inactive users at the end of the month
+#### snapshot_active_users_monthly
+* Dataset that shows the total (aggregate) number of active users at the beginning of the month
 
-#### snapshot_churn_rate_by_month
-* Dataset that shows the churn rate, calculated as:
+#### snapshot_user_churn_rate_daily
+* Dataset that shows the daily churn rate
 
-((total active users at end of previous month) - (total active users at end of last month that churned or became inactive at end of current month))/(total active users at end of previous month)
+Calculation:
+((total active users from previous day) - (total active users from previous day that churned on current day))/(total active users from previous day)
+
+#### snapshot_user_churn_rate_monthly
+* Dataset that shows the monthly churn rate
+
+Calculation:
+((total active users from previous month start) - (total active users from previous month that churned at current month start))/(total active users from previous month start)
