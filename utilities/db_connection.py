@@ -1,11 +1,11 @@
 """
-Redshift connection and execute functions
+Useful functions for connecting and querying a Redshift database
 """
 
 import os
 
 import psycopg2
-
+import pandas_redshift as pr
 
 DB_USER = os.environ['DB_USER']
 DB_PASSWORD = os.environ['DB_PASSWORD']
@@ -50,3 +50,17 @@ def execute_queries(conn, queries):
     finally:
         conn.close()
     print('Task complete')
+
+
+def db_pandas_query(query):
+    """
+    Read Redshift table into a pandas data frame
+    """
+    pr.connect_to_redshift(dbname = DB_NAME,
+                           host = DB_HOST,
+                           port = DB_PORT,
+                           user = DB_USER,
+                           password = DB_PASSWORD)
+    data = pr.redshift_to_pandas(query)
+    pr.close_up_shop()
+    return data

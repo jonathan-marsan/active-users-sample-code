@@ -7,7 +7,8 @@ import os
 from utilities.db_connection import db_connection, execute_queries
 
 
-SCHEMA = os.environ['SCHEMA_JM']
+ACTIVE_PERIOD = 28
+SCHEMA = os.environ['MY_SCHEMA']
 TABLE_NAME = 'derived_user_activated'
 
 
@@ -34,12 +35,12 @@ query_insert_tbl = """
           task_date as event_date,
           'ACTIVE' as status
         FROM
-          jmarsan.user_tasks_with_active_period
+          {0}.user_tasks_with_active_period
         WHERE
           (prev_task_date IS NULL
           OR
-          DATEDIFF(day, prev_task_date, task_date) > 28);
-""".format(SCHEMA, TABLE_NAME)
+          DATEDIFF(day, prev_task_date, task_date) > {2});
+""".format(SCHEMA, TABLE_NAME, ACTIVE_PERIOD)
 
 
 def load_derived_user_activated(conn):

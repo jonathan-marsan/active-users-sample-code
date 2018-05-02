@@ -15,8 +15,40 @@ from tables.compute_load_evolving_user_status_changed import load_evolving_user_
 from tables.compute_load_number import load_number
 from tables.compute_load_lookup_dates import load_lookup_dates
 from tables.compute_load_lookup_months import load_lookup_months
-from tables.compute_load_snapshot_active_users_at_month_end import load_snapshot_active_users_at_month_end
-from tables.compute_load_snapshot_churned_or_inactive_users_at_month_end import load_snapshot_churned_or_inactive_users_at_month_end
+from tables.compute_load_snapshot_active_users_daily import load_snapshot_active_users_daily
+from tables.compute_load_snapshot_active_users_monthly import load_snapshot_active_users_monthly
+from tables.compute_load_snapshot_user_churn_rate_daily import load_snapshot_user_churn_rate_daily
+from tables.compute_load_snapshot_user_churn_rate_monthly import load_snapshot_user_churn_rate_monthly
+
+
+class number(luigi.Task):
+    def requires(self):
+        return None
+    def output(self):
+        return RunAnywayTarget(self)
+    def run(self):
+        load_number(db_connection())
+        return self.output().done()
+
+
+class lookup_dates(luigi.Task):
+    def requires(self):
+        return [number()]
+    def output(self):
+        return RunAnywayTarget(self)
+    def run(self):
+        load_lookup_dates(db_connection())
+        return self.output().done()
+
+
+class lookup_months(luigi.Task):
+    def requires(self):
+        return [lookup_dates()]
+    def output(self):
+        return RunAnywayTarget(self)
+    def run(self):
+        load_lookup_months(db_connection())
+        return self.output().done()
 
 
 class user_tasks_with_active_period(luigi.Task):
@@ -70,71 +102,56 @@ class evolving_user_status_changed(luigi.Task):
         return self.output().done()
 
 
-class snapshot_active_users_at_month_end(luigi.Task):
+class snapshot_active_users_daily(luigi.Task):
     def requires(self):
-        return [evolving_user_status_changed()]
+        return [evolving_user_status_changed(),
+                lookup_dates()]
     def output(self):
         return RunAnywayTarget(self)
     def run(self):
-        load_snapshot_active_users_at_month_end(db_connection())
+        load_snapshot_active_users_daily(db_connection())
         return self.output().done()
 
 
-class snapshot_churned_or_inactive_users_at_month_end(luigi.Task):
+class snapshot_active_users_monthly(luigi.Task):
     def requires(self):
-        return [evolving_user_status_changed()]
-    def output(self):
-        return RunAnywayTarget(self)
-    def run(self):
-        load_snapshot_churned_or_inactive_users_at_month_end(db_connection())
-        return self.output().done()
-
-
-class end_task_active_users(luigi.Task):
-    def requires(self):
-        return [snapshot_active_users_at_month_end(),
-                snapshot_churned_or_inactive_users_at_month_end()]
-    def output(self):
-        return RunAnywayTarget(self)
-    def run(self):
-        print("Pipeline successfully run. Ending run.")
-        return self.output().done()
-
-
-class number(luigi.Task):
-    def requires(self):
-        return None
-    def output(self):
-        return RunAnywayTarget(self)
-    def run(self):
-        load_number(db_connection())
-        return self.output().done()
-
-
-class lookup_dates(luigi.Task):
-    def requires(self):
-        return [number()]
-    def output(self):
-        return RunAnywayTarget(self)
-    def run(self):
-        load_lookup_dates(db_connection())
-        return self.output().done()
-
-
-class lookup_months(luigi.Task):
-    def requires(self):
-        return [number()]
-    def output(self):
-        return RunAnywayTarget(self)
-    def run(self):
-        load_lookup_months(db_connection())
-        return self.output().done()
-
-
-class end_task_calendar(luigi.Task):
-    def requires(self):
-        return [lookup_dates(),
+        return [evolving_user_status_changed(),
                 lookup_months()]
+    def output(self):
+        return RunAnywayTarget(self)
+    def run(self):
+        load_snapshot_active_users_monthly(db_connection())
+        return self.output().done()
+
+
+class snapshot_user_churn_rate_daily(luigi.Task):
+    def requires(self):
+        return [evolving_user_status_changed(),
+                lookup_dates()]
+    def output(self):
+        return RunAnywayTarget(self)
+    def run(self):
+        load_snapshot_user_churn_rate_daily(db_connection())
+        return self.output().done()
+
+
+class snapshot_user_churn_rate_monthly(luigi.Task):
+    def requires(self):
+        return [evolving_user_status_changed(),
+                lookup_months()]
+    def output(self):
+        return RunAnywayTarget(self)
+    def run(self):
+        load_snapshot_user_churn_rate_monthly(db_connection())
+        return self.output().done()
+
+
+class end_task(luigi.Task):
+    def requires(self):
+        return [snapshot_active_users_daily(),
+                snapshot_active_users_monthly(),
+                snapshot_user_churn_rate_daily(),
+                snapshot_user_churn_rate_monthly()]
     def output(self):
         return RunAnywayTarget(self)
     def run(self):

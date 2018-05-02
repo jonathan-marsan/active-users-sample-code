@@ -7,7 +7,7 @@ import os
 from utilities.db_connection import db_connection, execute_queries
 
 
-SCHEMA = os.environ['SCHEMA_JM']
+SCHEMA = os.environ['MY_SCHEMA']
 TABLE_NAME = 'derived_user_churned'
 
 
@@ -34,13 +34,13 @@ query_insert_tbl = """
           task_date_period_end as event_date,
           'CHURNED' as status
         FROM
-          jmarsan.user_tasks_with_active_period
+          {0}.user_tasks_with_active_period
         WHERE
           (task_date_period_end < next_task_date
           OR
           next_task_date IS NULL)
           AND
-          DATEDIFF(day, task_date_period_end, CURRENT_DATE) > 28;
+          task_date_period_end < CURRENT_DATE;
 """.format(SCHEMA, TABLE_NAME)
 
 

@@ -8,7 +8,7 @@ from utilities.db_connection import execute_queries
 
 
 ACTIVE_PERIOD = 28
-SCHEMA = os.environ['SCHEMA_JM']
+SCHEMA = os.environ['MY_SCHEMA']
 VIEW_NAME = 'user_tasks_with_active_period'
 
 

@@ -7,7 +7,7 @@ import os
 from utilities.db_connection import db_connection, execute_queries
 
 
-SCHEMA = os.environ['SCHEMA_JM']
+SCHEMA = os.environ['MY_SCHEMA']
 TABLE_NAME = 'derived_user_became_inactive'
 
 
@@ -34,21 +34,21 @@ query_insert_tbl = """
           cancel_date_period_end as event_date,
           'INACTIVE' as status
         FROM
-          jmarsan.user_tasks_with_active_period
+          {0}.user_tasks_with_active_period
         WHERE
           (
-             task_date_period_end < next_task_date
+             next_task_date > task_date_period_end
              OR
              next_task_date IS NULL
           )
           AND
           (
-            next_task_date IS NULL
-            OR
-            next_task_date > cancel_date_period_end
+             next_task_date > cancel_date_period_end
+             OR
+             next_task_date IS NULL
           )
           AND
-          DATEDIFF(day, cancel_date_period_end, CURRENT_DATE) > 28;
+          cancel_date_period_end < CURRENT_DATE;
 """.format(SCHEMA, TABLE_NAME)
 
 

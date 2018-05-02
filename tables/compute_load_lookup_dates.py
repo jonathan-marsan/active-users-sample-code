@@ -9,7 +9,7 @@ from utilities.db_connection import db_connection, execute_queries
 
 
 # CONSTANTS
-SCHEMA = os.environ['SCHEMA_JM']
+SCHEMA = os.environ['MY_SCHEMA']
 TABLE_NAME = 'lookup_dates'
 
 
@@ -20,19 +20,17 @@ query_drop_tbl = """
 
 query_create_tbl = """
     CREATE TABLE {0}.{1}(
-        snapshot_datestart date NOT NULL,
-        snapshot_dateend date NOT NULL
+        snapshot_date date NOT NULL
     );
 """.format(SCHEMA, TABLE_NAME)
 
 
 query_insert_tbl = """
-    INSERT INTO {0}.{1}(snapshot_datestart, snapshot_dateend)
+    INSERT INTO {0}.{1}(snapshot_date)
         SELECT
-          '2017-01-01' :: DATE + number AS snapshot_datestart,
-          '2017-01-02' :: DATE + number AS snapshot_dateend
+          '2017-01-01' :: DATE + number AS snapshot_date
         FROM
-          jmarsan.number
+          {0}.number
         WHERE
           number < 365
         ORDER BY

@@ -7,7 +7,7 @@ import os
 from utilities.db_connection import db_connection, execute_queries
 
 
-SCHEMA = os.environ['SCHEMA_JM']
+SCHEMA = os.environ['MY_SCHEMA']
 TABLE_NAME = 'evolving_user_status_changed'
 
 
@@ -37,21 +37,21 @@ query_insert_tbl = """
               event_date,
               status
             FROM
-              jmarsan.derived_user_activated
+              {0}.derived_user_activated
             UNION
             SELECT
               user_id,
               event_date,
               status
             FROM
-              jmarsan.derived_user_churned
+              {0}.derived_user_churned
             UNION
             SELECT
               user_id,
               event_date,
               status
             FROM
-              jmarsan.derived_user_became_inactive
+              {0}.derived_user_became_inactive
         )
         SELECT
             user_id,

@@ -8,7 +8,7 @@ from utilities.db_connection import db_connection, execute_queries
 
 
 # CONSTANTS
-SCHEMA = os.environ['SCHEMA_JM']
+SCHEMA = os.environ['MY_SCHEMA']
 TABLE_NAME = 'lookup_months'
 
 
@@ -28,8 +28,8 @@ query_create_tbl = """
 query_insert_tbl = """
     INSERT INTO {0}.{1}(snapshot_datestart, snapshot_dateend)
         SELECT
-          snapshot_datestart,
-          CAST(DATEADD(month, 1, snapshot_datestart) as date)
+          snapshot_date as snapshot_datestart,
+          CAST(DATEADD(month, 1, snapshot_datestart) - interval '1 day' as date) as snapshot_dateend
         FROM
           jmarsan.lookup_dates
         WHERE
